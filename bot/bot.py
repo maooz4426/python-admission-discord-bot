@@ -33,6 +33,7 @@ async def button_command(ctx: commands.Context):
     view = SetButtonView()
     await ctx.send("下のボタンを押してください。", view=view)
 
+
 # cclient = discord.Client()
 bot.run(os.getenv("TOKEN"))
 # client.run(os.getenv("TOKEN"))
