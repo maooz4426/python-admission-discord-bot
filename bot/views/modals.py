@@ -5,10 +5,10 @@ class SetModal(Modal):
     def __init__(self,title):
         super().__init__(title = title)
 
-        self.name = InputText(label="name",style = discord.InputTextStyle.short)
+        self.name = InputText(label="名前",style = discord.InputTextStyle.short)
         self.add_item(self.name)
 
-        self.hiragana = InputText(label="hiragana",style=discord.InputTextStyle.short)
+        self.hiragana = InputText(label="ふりがな",style=discord.InputTextStyle.short)
         self.add_item(self.hiragana)
 
   
