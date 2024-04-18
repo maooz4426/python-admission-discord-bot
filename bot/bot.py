@@ -15,19 +15,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 async def on_ready():
     print("Hello")#起動するとターミナルに表示される
 
-
-# class MyButton(discord.ui.Button):
-#     def __init__(self, label: str, custom_id: str, style: discord.ButtonStyle):
-#         super().__init__(label=label, style=style, custom_id=custom_id)
-    
-#     async def callback(self, interaction: discord.Interaction):
-#         await interaction.response.send_message(f"{self.label} ボタンが押されました！", ephemeral=True)
-
-# class MyView(discord.ui.View):
-#     def __init__(self):
-#         super().__init__()
-#         self.add_item(MyButton(label="クリック", custom_id="click_button", style=discord.ButtonStyle.primary))
-
 @bot.command(name="button")
 async def button_command(ctx: commands.Context):
     view = SetButtonView()
