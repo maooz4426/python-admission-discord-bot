@@ -11,10 +11,12 @@ import os
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+#起動するとターミナルに表示される
 @bot.event
 async def on_ready():
-    print("Hello")#起動するとターミナルに表示される
+    print("Hello")
 
+#!buttonを入力するとボタンを表示
 @bot.command(name="button")
 async def button_command(ctx: commands.Context):
     view = SetButtonView()

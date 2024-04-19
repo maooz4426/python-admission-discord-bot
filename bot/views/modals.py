@@ -1,5 +1,6 @@
 import discord
 from discord.ui import Modal, InputText
+from gas.gas_post import gas_post
 
 class SetModal(Modal):
     def __init__(self,title):
@@ -11,4 +12,12 @@ class SetModal(Modal):
         self.hiragana = InputText(label="ふりがな",style=discord.InputTextStyle.short)
         self.add_item(self.hiragana)
 
-  
+    async def callback(self,interaction:discord.interactions) -> None:
+
+        name = self.name.value
+        hiragana = self.hiragana.value
+
+        gas_post(name,hiragana)
+        print("postしました")
+        await interaction.response.send_message(f"名前: {name}, ふりがな: {hiragana}を登録しました", ephemeral=True)
+
