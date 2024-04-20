@@ -5,8 +5,9 @@ import os
 
 url = os.getenv("URL")
 
-class gas_post:
-    def __init__(self,name,hiragana):
+# class gas_post:
+#     def __init__(self,name,hiragana):
+def gas_post(name,hiragana):
 
         print("post")
         #提出時間取得
