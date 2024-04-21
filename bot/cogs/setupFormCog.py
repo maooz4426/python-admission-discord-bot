@@ -22,11 +22,10 @@ class SetupFormCog(commands.Cog):
 class setupView(View):
     def __init__(self):
         super().__init__()
-        button = SetButton(label="入会届",style=discord.ButtonStyle.primary,modal=SetModal("入会届"))
-        
-        self.add_item(button)
-        # @discord.ui.button(label="入会届",row=1,style=discord.ButtonStyle.primary)
-
+        admissionbutton = SetButton(label="入会届",style=discord.ButtonStyle.primary,modal=SetModal("入会届"))
+        obogbutton = SetButton(label="OBOG届",style=discord.ButtonStyle.gray,modal=SetModal("OBOG届"))
+        self.add_item(admissionbutton)
+        self.add_item(obogbutton)
 
 
 def setup(bot):
