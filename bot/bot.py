@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ui import button
-from views.button import SetButtonView
+# from views.button import SetButtonView
 import os
 
 # bot = discord.Bot(
@@ -11,15 +11,18 @@ import os
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+#起動するとターミナルに表示される
 @bot.event
 async def on_ready():
-    print("Hello")#起動するとターミナルに表示される
+    print("Hello")
 
-@bot.command(name="button")
-async def button_command(ctx: commands.Context):
-    view = SetButtonView()
-    await ctx.send("下のボタンを押してください。", view=view)
+#!buttonを入力するとボタンを表示
+# @bot.command(name="button")
+# async def button_command(ctx: commands.Context):
+#     view = SetButtonView()
+#     await ctx.send("下のボタンを押してください。", view=view)
 
+bot.load_extension("cogs.setupFormCog")
 
 # cclient = discord.Client()
 bot.run(os.getenv("TOKEN"))
