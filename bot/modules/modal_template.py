@@ -1,7 +1,7 @@
 
 from discord.ui import Modal,InputText
 from discord import InputTextStyle
-from .gas_post import gas_post
+from .gas import gas_post
 
 
 class SetModal(Modal):

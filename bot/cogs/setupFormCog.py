@@ -9,16 +9,15 @@ class SetupFormCog(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
 
+    #!setupでボタンを表示する
     @commands.command(name="setup")
     async def setup_form(self,ctx):
         view = setupView()
         
-        # view = View()
-        # self.add_item(button)
-
         await ctx.send("下のボタンを選択してください", view = view)
 
 
+#ボタンをセットアップ
 class setupView(View):
     def __init__(self):
         super().__init__()
