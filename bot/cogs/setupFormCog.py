@@ -1,9 +1,8 @@
 import discord
 from discord.ext import commands
-from modules.button_template import SetButton
-from modules.modal_template import SetModal
+from modules.button_template import SetButtonToModal,SetButtonToView
+from modules.modal_template import SetForm
 from discord.ui import View
-
 
 class SetupFormCog(commands.Cog):
     def __init__(self,bot):
@@ -16,16 +15,24 @@ class SetupFormCog(commands.Cog):
         
         await ctx.send("下のボタンを選択してください", view = view)
 
-
-#ボタンをセットアップ
+#4つのボタンをセットアップ
 class setupView(View):
     def __init__(self):
         super().__init__()
-        admissionbutton = SetButton(label="入会届",style=discord.ButtonStyle.primary,modal=SetModal("入会届"))
-        obogbutton = SetButton(label="OBOG届",style=discord.ButtonStyle.gray,modal=SetModal("OBOG届"))
+        admissionbutton = SetButtonToView(label="入会届",style=discord.ButtonStyle.primary,view=SetupModalView("入会届",SetForm("入会届"),style=discord.ButtonStyle.primary),comment = "入会届を入力してください")
+        obogbutton = SetButtonToView(label="OBOG届",style=discord.ButtonStyle.gray,view=SetupModalView("OBOG届",SetForm("OBOG届"),style=discord.ButtonStyle.primary),comment = "obog届を入力してください")
         self.add_item(admissionbutton)
         self.add_item(obogbutton)
 
+#モーダル表示のview
+class SetupModalView(View):
+    def __init__(self,label,modal,style):
+    # def __init__(self,label,modal,style):
+        super().__init__()
+        button = SetButtonToModal(label=label,modal=modal,style=style)
+        # button = SetButtonToModal(label=label,modal=modal,style=style)
+        
+        self.add_item(button)
 
 def setup(bot):
     bot.add_cog(SetupFormCog(bot))
