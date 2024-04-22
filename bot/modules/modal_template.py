@@ -1,10 +1,14 @@
 
-from discord.ui import Modal,InputText,Select
+from discord.ui import Modal,InputText,Select,View
 from discord import InputTextStyle,SelectOption
-
+import discord
 from .gas import GasHandle
+from .button_template import SetButtonToModal
+from .view import SetupModalView
+
 
 class SetForm:
+    #送るデータを辞書型配列として初期化
     def __init__(self,title):
         self.title = title
         # self.uid = str(interaction.user.id)
@@ -24,10 +28,11 @@ class SetForm:
     #モーダルのテンプレート
     class SetModal1(Modal):
 
-        def __init__(self,data):
-            super().__init__(title=self.title)
-
-            self.data = data
+        def __init__(self,form):
+            super().__init__(title=form.title)
+            self.title = form.title
+            self.data = form.data
+            self.nextmodal = form.SetModal2(form)
 
             # 名前入力
             self.name = InputText(label="氏名", style=InputTextStyle.short)
@@ -50,49 +55,54 @@ class SetForm:
             self.add_item(self.student_id)
 
 
-        async def callback(self):
+        async def callback(self,interaction:discord.Interaction):
 
+            # 辞書にデータを入力
             self.data["name"] = self.name.value
             self.data["hiragana"] = self.hiragana.value
             self.data["nickname"] = self.nickname.value
             self.data["admission_year"] = self.admission_year.value
             self.data["student_id"] = self.student_id.value
 
+            view = SetupModalView(self.title,self.nextmodal,discord.ButtonStyle.primary)
+            
+            
+            await interaction.response.send_message(f"{self.title}の続きを入力してください",view = view)
+            
+            
 
     class SetModal2(Modal):
             
-            def __init__(self,data,title):
-                super.__init__(title = title)
-
-                self.data = data
-
-                # RAINBOW ID
-                self.rainbow_id = InputText(label="RAINBOW ID", style=InputTextStyle.short)
-                self.add_item(self.rainbow_id)
+        def __init__(self,form):
+            super().__init__(title=form.title)
+            self.title = form.title
+            self.data = form.data
+            # RAINBOW ID
+            self.rainbow_id = InputText(label="RAINBOW ID", style=InputTextStyle.short)
+            self.add_item(self.rainbow_id)
                     
-                # 学部
-                self.faculty = InputText(label="学部", style=InputTextStyle.short)
-                self.add_item(self.faculty)
+            # 学部
+            self.faculty = InputText(label="学部", style=InputTextStyle.short)
+            self.add_item(self.faculty)
                     
-                # 学科（コース）
-                self.department = InputText(label="学科（コース）", style=InputTextStyle.short)
-                self.add_item(self.department)
+            # 学科（コース）
+            self.department = InputText(label="学科（コース）", style=InputTextStyle.short)
+            self.add_item(self.department)
                     
-                # 携帯電話番号
-                self.phone = InputText(label="携帯電話番号", style=InputTextStyle.short)
-                self.add_item(self.phone)
+            # 携帯電話番号
+            self.phone = InputText(label="携帯電話番号", style=InputTextStyle.short)
+            self.add_item(self.phone)
                     
-                # Gmailアドレス
-                self.gmail = InputText(label="Gmailアドレス", style=InputTextStyle.short)
-                self.add_item(self.gmail)
+            # Gmailアドレス
+            self.gmail = InputText(label="Gmailアドレス", style=InputTextStyle.short)
+            self.add_item(self.gmail)
 
-            async def callback(self):
-
-                self.data["rainbow_id"] = self.rainbow_id.value
-                self.data["faculty"] = self.faculty.value
-                self.data["department"] = self.department.value
-                self.data["phone"] = self.phone.value
-                self.data["gmail"] = self.gmail.value
+        async def callback(self):
+            self.data["rainbow_id"] = self.rainbow_id.value
+            self.data["faculty"] = self.faculty.value
+            self.data["department"] = self.department.value
+            self.data["phone"] = self.phone.value
+            self.data["gmail"] = self.gmail.value
 
                 # GasHandle.gas_post(interaction, name, hiragana, nickname, admission_year,student_id)
                 # await interaction.response.send_message(f"{self.title}を送信しました")

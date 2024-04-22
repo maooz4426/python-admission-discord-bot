@@ -9,8 +9,8 @@ class SetButtonToView(Button):
     def __init__(self,label,view,style,comment):
         super().__init__(label = label, style=style)
         # self.ctx = ctx
-        # self.view = view
-        self.view2 = view
+        
+        self.view2 = view# self.view = viewとすると目的のviewが開かない、セッターを準備しろとエラーが出る
         self.comment = comment
         # self.button = button
 
