@@ -13,7 +13,7 @@ class GasHandle():
          
      
     # def gas_post(self,interaction, name, hiragana, nickname, admission_year, student_id, rainbow_id, faculty, department, phone, gmail):
-    def gas_post(self,interaction,data):
+    def gas_post(interaction,data):
             print("post")
             #提出時間取得
             now = datetime.datetime.now()

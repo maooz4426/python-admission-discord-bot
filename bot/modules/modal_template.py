@@ -4,7 +4,9 @@ from discord import InputTextStyle,SelectOption
 import discord
 from .gas import GasHandle
 from .button_template import SetButtonToModal
-from .view import SetupModalView
+# このインポートを関数内に移動
+# from .view import SetupModalView, SetupFinishView
+
 
 
 class SetForm:
@@ -30,6 +32,7 @@ class SetForm:
 
         def __init__(self,form):
             super().__init__(title=form.title)
+            
             self.title = form.title
             self.data = form.data
             self.nextmodal = form.SetModal2(form)
@@ -64,9 +67,13 @@ class SetForm:
             self.data["admission_year"] = self.admission_year.value
             self.data["student_id"] = self.student_id.value
 
+            # 循環インポートを避けるためにここでインポート
+            from .view import SetupModalView
+
+            # 追加入力をさせるためのボタン表示の準備
             view = SetupModalView(self.title,self.nextmodal,discord.ButtonStyle.primary)
             
-            
+            # 説明とボタンを表示
             await interaction.response.send_message(f"{self.title}の続きを入力してください",view = view)
             
             
@@ -75,6 +82,7 @@ class SetForm:
             
         def __init__(self,form):
             super().__init__(title=form.title)
+            self.form = form
             self.title = form.title
             self.data = form.data
             # RAINBOW ID
@@ -97,12 +105,19 @@ class SetForm:
             self.gmail = InputText(label="Gmailアドレス", style=InputTextStyle.short)
             self.add_item(self.gmail)
 
-        async def callback(self):
+        async def callback(self,interaction:discord.Interaction):
             self.data["rainbow_id"] = self.rainbow_id.value
             self.data["faculty"] = self.faculty.value
             self.data["department"] = self.department.value
             self.data["phone"] = self.phone.value
             self.data["gmail"] = self.gmail.value
+
+            # 循環インポートを避けるためにここでインポート
+            from .view import SetupFinishView
+
+            view = SetupFinishView(form = self.form,label=self.title,style=discord.ButtonStyle.primary)
+
+            await interaction.response.send_message("ボタンを押して完了してください！",view=view)
 
                 # GasHandle.gas_post(interaction, name, hiragana, nickname, admission_year,student_id)
                 # await interaction.response.send_message(f"{self.title}を送信しました")

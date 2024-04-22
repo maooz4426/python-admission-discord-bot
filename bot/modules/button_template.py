@@ -1,6 +1,7 @@
 from typing import Any
 import discord
 from discord.ui import Button,View
+from .gas import GasHandle
 
 
 
@@ -38,3 +39,13 @@ class SetButtonToModal(Button):
     #モーダル表示する
     async def callback(self,interaction:discord.Interaction):
         await interaction.response.send_modal(self.modal)
+
+class SetFinishButton(Button):
+    def __init__(self,form,label,style):
+        # self.label = str(label) + "を完了する"
+        super().__init__(label=str(label) + "を完了する",style=style)
+        self.form = form
+
+    async def callback(self, interaction: discord.Interaction):
+        GasHandle.gas_post(interaction=interaction,data=self.form.data)
+        await interaction.response.send_message(f"{self.label}の送信が完了しました")
