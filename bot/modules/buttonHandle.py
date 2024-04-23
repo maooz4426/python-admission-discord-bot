@@ -2,20 +2,24 @@ from typing import Any
 import discord
 from discord.ui import Button,View
 from .gas import GasHandle
+import config
+import asyncio
 
 
 
 #ボタンを押したらボタン(View）が表示される
 class SetButtonToView(Button):
-    def __init__(self,label,view,style,comment):
+    def __init__(self,label,view,style,comment,user):
         super().__init__(label = label, style=style)
-        # self.ctx = ctx
+        self.user = user
         
-        self.view2 = view# self.view = viewとすると目的のviewが開かない、セッターを準備しろとエラーが出る
-        self.comment = comment
+        # self.view = viewとすると目的のviewが開かない、セッターを準備しろとエラーが出る
+        self.view2 = view
+        self.style = style
+        self.comment = user+comment
         # self.button = button
 
-    print("1button")
+    # print("1button")
 
     @property
     def view(self):
@@ -27,12 +31,15 @@ class SetButtonToView(Button):
 
     async def callback(self,interaction:discord.Interaction):
         # await self.ctx.send(self.comment,view = self.view())
-        await interaction.response.send_message(self.comment, view=self.view2)
+        message = await interaction.response.send_message(self.comment, view=self.view2,ephemeral=True)
+        config.last_messageID = message
+        
 
 #ボタンを押したらモーダルを表示する
 class SetButtonToModal(Button):
-    def __init__(self, label, modal,style):
+    def __init__(self,user, label, modal,style):
         super().__init__(label=label, style=style)
+        self.user = user
         self.modal = modal
         # self.interaciton = interaction
 
@@ -43,11 +50,19 @@ class SetButtonToModal(Button):
 
 #ボタンを押したらgasにpostリクエストを送る
 class SetFinishButton(Button):
-    def __init__(self,form,label,style):
+    def __init__(self,user,form,label,style):
         # self.label = str(label) + "を完了する"
         super().__init__(label=label ,style=style)
         self.form = form
+        self.user = user
 
     async def callback(self, interaction: discord.Interaction):
         GasHandle.gas_post(interaction=interaction,data=self.form.data)
-        await interaction.response.send_message(f"{self.label}の送信が完了しました")
+
+        last_message = config.last_messageID
+        await last_message.delete_original_response()
+
+        message = await interaction.response.send_message(self.user+f"{self.label}の送信が完了しました",ephemeral=True)
+
+        await asyncio.sleep(20)
+        await message.delete_original_response()

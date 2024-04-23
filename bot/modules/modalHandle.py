@@ -3,7 +3,8 @@ from discord.ui import Modal,InputText,Select,View
 from discord import InputTextStyle,SelectOption
 import discord
 from .gas import GasHandle
-from .button import SetButtonToModal
+from .buttonHandle import SetButtonToModal
+import config
 # このインポートを関数内に移動
 # from .view import SetupModalView, SetupFinishView
 
@@ -11,7 +12,8 @@ from .button import SetButtonToModal
 
 class SetForm:
     #送るデータを辞書型配列として初期化
-    def __init__(self,title):
+    def __init__(self,user,title):
+        self.user = user
         self.title = title
         # self.uid = str(interaction.user.id)
         self.data = {
@@ -32,6 +34,8 @@ class SetForm:
 
         def __init__(self,form):
             super().__init__(title=form.title)
+
+            self.user = form.user
             
             self.title = form.title
             self.data = form.data
@@ -68,14 +72,19 @@ class SetForm:
             self.data["student_id"] = self.student_id.value
 
             # 循環インポートを避けるためにここでインポート
-            from .view import SetModalView
+            from .viewHandle import SetModalView
 
             # 追加入力をさせるためのボタン表示の準備
-            view = SetModalView(self.title,self.nextmodal,discord.ButtonStyle.primary)
+            view = SetModalView(self.user,self.title,self.nextmodal,discord.ButtonStyle.primary)
             
+            last_message = config.last_messageID
+            # last_message.delete()
+            #前のメッセージを消去
+            await last_message.delete_original_response()
+
             # 説明とボタンを表示
-            await interaction.response.send_message(f"{self.title}の続きを入力してください",view = view)
-            
+            message = await interaction.response.send_message(self.user+f"{self.title}の続きを入力してください",view = view,ephemeral=True)
+            config.last_messageID = message
             
     #モーダルのテンプレート２
     class SetModal2(Modal):
@@ -83,6 +92,7 @@ class SetForm:
         def __init__(self,form):
             super().__init__(title=form.title)
             self.form = form
+            self.user = form.user
             self.title = form.title
             self.data = form.data
 
@@ -115,13 +125,16 @@ class SetForm:
             self.data["gmail"] = self.gmail.value
 
             # 循環インポートを避けるためにここでインポート
-            from .view import SetupFinishView
+            from .viewHandle import SetFinishView
 
             #完了ボタンを表示するためViewを作成
-            view = SetupFinishView(form = self.form,label=self.title,style=discord.ButtonStyle.primary)
+            view = SetFinishView(user=self.user,form = self.form,label=self.title,style=discord.ButtonStyle.primary)
+            
+            last_message = config.last_messageID
+            await last_message.delete_original_response()
 
-            await interaction.response.send_message("ボタンを押して完了してください！",view=view)
-
+            message = await interaction.response.send_message(self.user+"ボタンを押して完了してください！",view=view,ephemeral=True)
+            config.last_messageID = message
                 # GasHandle.gas_post(interaction, name, hiragana, nickname, admission_year,student_id)
                 # await interaction.response.send_message(f"{self.title}を送信しました")
                 # rainbow_id = self.rainbow_id.value
