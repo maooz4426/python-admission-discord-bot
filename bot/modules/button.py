@@ -5,7 +5,7 @@ from .gas import GasHandle
 
 
 
-#ボタンテンプレート
+#ボタンを押したらボタン(View）が表示される
 class SetButtonToView(Button):
     def __init__(self,label,view,style,comment):
         super().__init__(label = label, style=style)
@@ -29,6 +29,7 @@ class SetButtonToView(Button):
         # await self.ctx.send(self.comment,view = self.view())
         await interaction.response.send_message(self.comment, view=self.view2)
 
+#ボタンを押したらモーダルを表示する
 class SetButtonToModal(Button):
     def __init__(self, label, modal,style):
         super().__init__(label=label, style=style)
@@ -40,10 +41,11 @@ class SetButtonToModal(Button):
     async def callback(self,interaction:discord.Interaction):
         await interaction.response.send_modal(self.modal)
 
+#ボタンを押したらgasにpostリクエストを送る
 class SetFinishButton(Button):
     def __init__(self,form,label,style):
         # self.label = str(label) + "を完了する"
-        super().__init__(label=str(label) + "を完了する",style=style)
+        super().__init__(label=label ,style=style)
         self.form = form
 
     async def callback(self, interaction: discord.Interaction):

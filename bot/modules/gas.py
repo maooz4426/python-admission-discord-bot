@@ -13,6 +13,7 @@ class GasHandle():
          
      
     # def gas_post(self,interaction, name, hiragana, nickname, admission_year, student_id, rainbow_id, faculty, department, phone, gmail):
+    #postリクエストを送るためのメソッド
     def gas_post(interaction,data):
             print("post")
             #提出時間取得

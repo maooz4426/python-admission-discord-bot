@@ -27,7 +27,7 @@ class SetForm:
             "gmail": ""
         }
 
-    #モーダルのテンプレート
+    #モーダルのテンプレート１
     class SetModal1(Modal):
 
         def __init__(self,form):
@@ -57,7 +57,7 @@ class SetForm:
             self.student_id = InputText(label="学籍番号", style=InputTextStyle.short)
             self.add_item(self.student_id)
 
-
+        #コールバック関数を設定
         async def callback(self,interaction:discord.Interaction):
 
             # 辞書にデータを入力
@@ -77,7 +77,7 @@ class SetForm:
             await interaction.response.send_message(f"{self.title}の続きを入力してください",view = view)
             
             
-
+    #モーダルのテンプレート２
     class SetModal2(Modal):
             
         def __init__(self,form):
@@ -85,6 +85,7 @@ class SetForm:
             self.form = form
             self.title = form.title
             self.data = form.data
+
             # RAINBOW ID
             self.rainbow_id = InputText(label="RAINBOW ID", style=InputTextStyle.short)
             self.add_item(self.rainbow_id)
@@ -105,6 +106,7 @@ class SetForm:
             self.gmail = InputText(label="Gmailアドレス", style=InputTextStyle.short)
             self.add_item(self.gmail)
 
+        #コールバック関数を設定
         async def callback(self,interaction:discord.Interaction):
             self.data["rainbow_id"] = self.rainbow_id.value
             self.data["faculty"] = self.faculty.value
@@ -115,6 +117,7 @@ class SetForm:
             # 循環インポートを避けるためにここでインポート
             from .view import SetupFinishView
 
+            #完了ボタンを表示するためViewを作成
             view = SetupFinishView(form = self.form,label=self.title,style=discord.ButtonStyle.primary)
 
             await interaction.response.send_message("ボタンを押して完了してください！",view=view)
