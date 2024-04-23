@@ -3,7 +3,7 @@ from discord.ui import Modal,InputText,Select,View
 from discord import InputTextStyle,SelectOption
 import discord
 from .gas import GasHandle
-from .button_template import SetButtonToModal
+from .button import SetButtonToModal
 # このインポートを関数内に移動
 # from .view import SetupModalView, SetupFinishView
 
@@ -68,10 +68,10 @@ class SetForm:
             self.data["student_id"] = self.student_id.value
 
             # 循環インポートを避けるためにここでインポート
-            from .view import SetupModalView
+            from .view import SetModalView
 
             # 追加入力をさせるためのボタン表示の準備
-            view = SetupModalView(self.title,self.nextmodal,discord.ButtonStyle.primary)
+            view = SetModalView(self.title,self.nextmodal,discord.ButtonStyle.primary)
             
             # 説明とボタンを表示
             await interaction.response.send_message(f"{self.title}の続きを入力してください",view = view)
