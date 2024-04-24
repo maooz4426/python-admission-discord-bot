@@ -32,8 +32,19 @@ class SetButtonToView(Button):
     async def callback(self,interaction:discord.Interaction):
         # await self.ctx.send(self.comment,view = self.view())
         message = await interaction.response.send_message(self.comment, view=self.view2,ephemeral=True)
+        
         config.last_messageID = message
         
+#モーダル表示切り替えと提出ボタンを切り替える動的に変わっていくボタンのクラス
+class ChangeButtonType(Button):
+    def __init__(self,user,label,modal,style):
+        super().__init__(label=label,style=style)
+        self.user=user
+        self.modal=modal
+
+
+
+
 
 #ボタンを押したらモーダルを表示する
 class SetButtonToModal(Button):
@@ -52,7 +63,7 @@ class SetButtonToModal(Button):
 class SetFinishButton(Button):
     def __init__(self,user,form,label,style):
         # self.label = str(label) + "を完了する"
-        super().__init__(label=label ,style=style)
+        super().__init__(label=label+"を完了" ,style=style)
         self.form = form
         self.user = user
 
@@ -60,9 +71,12 @@ class SetFinishButton(Button):
         GasHandle.gas_post(interaction=interaction,data=self.form.data)
 
         last_message = config.last_messageID
-        await last_message.delete_original_response()
+        # await last_message.delete_original_response()
 
-        message = await interaction.response.send_message(self.user+f"{self.label}の送信が完了しました",ephemeral=True)
+        # message = await interaction.response.send_message(self.user+f"{self.label}の送信が完了しました",ephemeral=True)
 
+        
+        
+        await interaction.response.edit_message(content=self.user+f"{self.label}の送信が完了しました", view = None)
         await asyncio.sleep(20)
-        await message.delete_original_response()
+        await last_message.delete_original_response()

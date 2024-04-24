@@ -77,14 +77,19 @@ class SetForm:
             # 追加入力をさせるためのボタン表示の準備
             view = SetModalView(self.user,self.title,self.nextmodal,discord.ButtonStyle.primary)
             
-            last_message = config.last_messageID
+            # last_message = config.last_messageID
             # last_message.delete()
             #前のメッセージを消去
-            await last_message.delete_original_response()
+            # await last_message.delete_original_response()
 
             # 説明とボタンを表示
-            message = await interaction.response.send_message(self.user+f"{self.title}の続きを入力してください",view = view,ephemeral=True)
-            config.last_messageID = message
+            # message = await interaction.response.send_message(self.user+f"{self.title}の続きを入力してください",view = view,ephemeral=True)
+            # await interaction.response.edit_message(message_id=last_message,content=self.user+f"{self.title}の続きを入力してください",view=view)
+
+            #メッセージの中身とボタンを入れ替え
+            await interaction.response.edit_message(content=self.user+f"{self.title}の続きを入力してください",view = view)
+            
+            # config.last_messageID = message
             
     #モーダルのテンプレート２
     class SetModal2(Modal):
@@ -131,10 +136,11 @@ class SetForm:
             view = SetFinishView(user=self.user,form = self.form,label=self.title,style=discord.ButtonStyle.primary)
             
             last_message = config.last_messageID
-            await last_message.delete_original_response()
+            # await last_message.delete_original_response()
 
-            message = await interaction.response.send_message(self.user+"ボタンを押して完了してください！",view=view,ephemeral=True)
-            config.last_messageID = message
+            await interaction.response.edit_message(content=self.user+"ボタンを押して完了してください！",view = view)
+            # message = await interaction.response.send_message(self.user+"ボタンを押して完了してください！",view=view,ephemeral=True)
+            # config.last_messageID = message
                 # GasHandle.gas_post(interaction, name, hiragana, nickname, admission_year,student_id)
                 # await interaction.response.send_message(f"{self.title}を送信しました")
                 # rainbow_id = self.rainbow_id.value
