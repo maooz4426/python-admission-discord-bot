@@ -14,7 +14,7 @@ class GasHandle():
      
     # def gas_post(self,interaction, name, hiragana, nickname, admission_year, student_id, rainbow_id, faculty, department, phone, gmail):
     #postリクエストを送るためのメソッド
-    async def gas_post(interaction,data):
+    def gas_post(interaction,data):
             print("post")
             #提出時間取得
             now = datetime.datetime.now()
@@ -38,21 +38,20 @@ class GasHandle():
                 print(f"Request failed: {e}")
 
     def gas_get(user):
-         print("get")
+        print("get")
 
-         headers = {"Contents-Type":"application/json"}
+        #  headers = {"Contents-Type":"application/json"}
 
-         payload = {
-              "uid":user,
-         }
-         print(payload["uid"])
+        payload = {
+            "uid":user,
+        }
+        print(payload["uid"])
 
-         try:
-              response = requests.get(url,params=payload)
-              print(response.text) #テキスト形式で取得
-              response.raise_for_status()
-              print(json.dumps(payload))
-              return response.json()
-              
-         except requests.RequestException as e:
-              print(f"Request failed:{e}")
+        try:
+            response = requests.get(url,params=payload)
+            print(response.text) #テキスト形式で取得
+            response.raise_for_status()
+            print(json.dumps(payload))
+            return response.json()
+        except requests.RequestException as e:
+            print(f"Request failed:{e}")

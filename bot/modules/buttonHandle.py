@@ -11,19 +11,15 @@ import re
 
 #ボタンを押したらボタン(View）が表示される
 class SetButtonToView(Button):
-    def __init__(self,label,view,style,comment,user,form):
+    def __init__(self,label,style,comment,user):
         super().__init__(label = label, style=style)
         self.user = user
-        
+        self.title = label
         # self.view = viewとすると目的のviewが開かない、セッターを準備しろとエラーが出る
-        self.view2 = view
+        # self.view2 = view
         self.style = style
         self.comment = user+comment
-        self.form = form
-        # print(self.form.get("name"))
-        # self.button = button
-
-    # print("1button")
+        # self.form = form
 
     @property
     def view(self):
@@ -34,8 +30,15 @@ class SetButtonToView(Button):
         self._view = value  # セッターを通じて値を設定可能に
 
     async def callback(self,interaction:discord.Interaction):
-        # await self.ctx.send(self.comment,view = self.view())
-        message = await interaction.response.send_message(self.comment, view=self.view2,ephemeral=True)
+        #15分作業可能にするため
+        await interaction.response.defer(ephemeral=True)
+        from .modalHandle import SetForm
+        from .viewHandle import SetModalView
+
+        #formをここで作成する
+        self.form = SetForm(self.user,self.title)
+
+        #情報変更届の場合はdataの中身をセット
         if self.form.title == "情報変更届":
             uid = re.sub("[<@>]","",self.user)
 
@@ -45,6 +48,27 @@ class SetButtonToView(Button):
             # print(get_data)
             from .modalHandle import SetForm
             self.form.setdata(get_data)
+
+        #modal1をここで作成する
+        self.modal = self.form.SetModal1(self.form)
+        # Modal 用の View をここで作成する（モーダル遷移ボタンを表示）
+        self.view = SetModalView(user=self.user, label=self.title, modal=self.modal, style=self.style, form=self.form)
+
+        # self.view = SetButtonToModal(user=self.user,label=self.title,modal=self.modal,style=self.style,form=self.form)
+        
+        # message = await interaction.response.send_message(self.comment, view=self.view,ephemeral=True)
+        message = await interaction.followup.send(self.comment, view=self.view, ephemeral=True)
+
+        #modalを作る前に使うために上に書くのでコメントアウト
+        # if self.form.title == "情報変更届":
+        #     uid = re.sub("[<@>]","",self.user)
+
+        #     get_data = GasHandle.gas_get(uid)
+
+        #     print("getdata")
+        #     # print(get_data)
+        #     from .modalHandle import SetForm
+        #     self.form.setdata(get_data)
             # print(self.form.data.get("name"))
             
 
@@ -89,4 +113,6 @@ class SetFinishButton(Button):
         
         await interaction.response.edit_message(content=self.user+f"{self.label}の送信が完了しました", view = None)
         await asyncio.sleep(20)
-        await last_message.delete_original_response()
+        await last_message.delete()
+
+        # await last_message.delete_original_response()

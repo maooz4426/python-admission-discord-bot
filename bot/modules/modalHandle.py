@@ -70,11 +70,12 @@ class SetForm:
         def __init__(self,form):
             super().__init__(title=form.title)
 
+            self.form = form
             self.user = form.user
             
             self.title = form.title.replace("(1/1)","")
             self.data = form.data
-            print(form)
+            # print(form)
             self.nextmodal = form.SetModal2(form)
 
             # 名前入力
@@ -82,19 +83,19 @@ class SetForm:
             self.add_item(self.name)
             
             # ふりがな入力
-            self.hiragana = InputText(label="氏名（ふりがな）", style=InputTextStyle.short,value = self.data.get("name"))
+            self.hiragana = InputText(label="ふりがな", style=InputTextStyle.short, value=self.data.get("hiragana"))
             self.add_item(self.hiragana)
             print(self.data.get("name"))
             # ニックネーム入力
-            self.nickname = InputText(label="ニックネーム", style=InputTextStyle.short)
+            self.nickname = InputText(label="ニックネーム", style=InputTextStyle.short, value=self.data.get("nickname"))
             self.add_item(self.nickname)
 
             # 入学年度
-            self.admission_year = InputText(label="入学年度", style=InputTextStyle.short)
+            self.admission_year = InputText(label="入学年度", style=InputTextStyle.short, value=self.data.get("admission_year"))
             self.add_item(self.admission_year)
             
             # 学籍番号
-            self.student_id = InputText(label="学籍番号", style=InputTextStyle.short)
+            self.student_id = InputText(label="学籍番号", style=InputTextStyle.short, value=self.data.get("student_id"))
             self.add_item(self.student_id)
 
         #コールバック関数を設定
@@ -111,7 +112,7 @@ class SetForm:
             from .viewHandle import SetModalView
 
             # 追加入力をさせるためのボタン表示の準備
-            view = SetModalView(self.user,self.title+"(2/2)",self.nextmodal,discord.ButtonStyle.primary)
+            view = SetModalView(self.user,self.title+"(2/2)",self.nextmodal,discord.ButtonStyle.primary,form=self.form)
             
             # last_message = config.last_messageID
             # last_message.delete()
@@ -138,23 +139,23 @@ class SetForm:
             self.data = form.data
 
             # RAINBOW ID
-            self.rainbow_id = InputText(label="RAINBOW ID", style=InputTextStyle.short)
+            self.rainbow_id = InputText(label="RAINBOW ID", style=InputTextStyle.short, value=self.data.get("rainbow_id"))
             self.add_item(self.rainbow_id)
                     
             # 学部
-            self.faculty = InputText(label="学部", style=InputTextStyle.short)
+            self.faculty = InputText(label="学部", style=InputTextStyle.short, value=self.data.get("faculty"))
             self.add_item(self.faculty)
                     
             # 学科（コース）
-            self.department = InputText(label="学科（コース）", style=InputTextStyle.short)
+            self.department = InputText(label="学科（コース）", style=InputTextStyle.short, value=self.data.get("department"))
             self.add_item(self.department)
                     
             # 携帯電話番号
-            self.phone = InputText(label="携帯電話番号", style=InputTextStyle.short)
+            self.phone = InputText(label="電話番号", style=InputTextStyle.short, value=self.data.get("phone"))
             self.add_item(self.phone)
                     
             # Gmailアドレス
-            self.gmail = InputText(label="Gmailアドレス", style=InputTextStyle.short)
+            self.gmail = InputText(label="Gmailアドレス", style=InputTextStyle.short, value=self.data.get("gmail"))
             self.add_item(self.gmail)
 
         #コールバック関数を設定
