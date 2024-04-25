@@ -4,12 +4,14 @@ from discord.ui import Button,View
 from .gas import GasHandle
 import config
 import asyncio
+import re
+# from .modalHandle import SetForm
 
 
 
 #ボタンを押したらボタン(View）が表示される
 class SetButtonToView(Button):
-    def __init__(self,label,view,style,comment,user):
+    def __init__(self,label,view,style,comment,user,form):
         super().__init__(label = label, style=style)
         self.user = user
         
@@ -17,6 +19,8 @@ class SetButtonToView(Button):
         self.view2 = view
         self.style = style
         self.comment = user+comment
+        self.form = form
+        # print(self.form.get("name"))
         # self.button = button
 
     # print("1button")
@@ -32,32 +36,38 @@ class SetButtonToView(Button):
     async def callback(self,interaction:discord.Interaction):
         # await self.ctx.send(self.comment,view = self.view())
         message = await interaction.response.send_message(self.comment, view=self.view2,ephemeral=True)
-        
+        if self.form.title == "情報変更届":
+            uid = re.sub("[<@>]","",self.user)
+
+            get_data = GasHandle.gas_get(uid)
+
+            print("getdata")
+            # print(get_data)
+            from .modalHandle import SetForm
+            self.form.setdata(get_data)
+            # print(self.form.data.get("name"))
+            
+
         config.last_messageID = message
-        
-#モーダル表示切り替えと提出ボタンを切り替える動的に変わっていくボタンのクラス
-class ChangeButtonType(Button):
-    def __init__(self,user,label,modal,style):
-        super().__init__(label=label,style=style)
-        self.user=user
-        self.modal=modal
-
-
 
 
 
 #ボタンを押したらモーダルを表示する
 class SetButtonToModal(Button):
-    def __init__(self,user, label, modal,style):
+    def __init__(self,user, label, modal,style,form):
         super().__init__(label=label, style=style)
         self.user = user
         self.modal = modal
+        self.form = form
         # self.interaciton = interaction
 
     #ボタンのコールバック関数
     #モーダル表示する
     async def callback(self,interaction:discord.Interaction):
+
+        
         await interaction.response.send_modal(self.modal)
+        # await interaction.response.defer()
 
 #ボタンを押したらgasにpostリクエストを送る
 class SetFinishButton(Button):

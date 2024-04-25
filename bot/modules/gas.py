@@ -14,7 +14,7 @@ class GasHandle():
      
     # def gas_post(self,interaction, name, hiragana, nickname, admission_year, student_id, rainbow_id, faculty, department, phone, gmail):
     #postリクエストを送るためのメソッド
-    def gas_post(interaction,data):
+    async def gas_post(interaction,data):
             print("post")
             #提出時間取得
             now = datetime.datetime.now()
@@ -29,26 +29,30 @@ class GasHandle():
                  **data
             }
 
-            # self.data = data
-            # data = {
-            #     "uid": str(interaction.user.id),  # ユーザーID
-            #     "currentTime": format_now,  # 提出時間
-            #     "name": name,  # 氏名
-            #     "hiragana": hiragana,  # ふりがな
-            #     "nickname": nickname,  # ニックネーム
-            #     "admissionYear": admission_year,  # 入学年度
-            #     "studentID": student_id,  # 学籍番号
-            #     "rainbowID": rainbow_id,  # RAINBOW ID
-            #     "faculty": faculty,  # 学部
-            #     "department": department,  # 学科（コース）
-            #     "phone": phone,  # 電話番号
-            #     "gmail": gmail  # Gmailアドレス
-            # }
-
             try:
                 response = requests.post(url, data=json.dumps(payload), headers=headers)
                 response.raise_for_status()  # HTTPエラーをチェック
                 print(json.dumps(payload)) #jsonの中身チェック
-                print(response.text) #テキスト形式で取得
+                
             except requests.RequestException as e:
                 print(f"Request failed: {e}")
+
+    def gas_get(user):
+         print("get")
+
+         headers = {"Contents-Type":"application/json"}
+
+         payload = {
+              "uid":user,
+         }
+         print(payload["uid"])
+
+         try:
+              response = requests.get(url,params=payload)
+              print(response.text) #テキスト形式で取得
+              response.raise_for_status()
+              print(json.dumps(payload))
+              return response.json()
+              
+         except requests.RequestException as e:
+              print(f"Request failed:{e}")

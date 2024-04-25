@@ -4,11 +4,8 @@ from discord import InputTextStyle,SelectOption
 import discord
 from .gas import GasHandle
 from .buttonHandle import SetButtonToModal
-import config
 # このインポートを関数内に移動
 # from .view import SetupModalView, SetupFinishView
-
-
 
 class SetForm:
     #送るデータを辞書型配列として初期化
@@ -16,6 +13,10 @@ class SetForm:
         self.user = user
         self.title = title
         # self.uid = str(interaction.user.id)
+
+        # get_data = GasHandle.gas_get(self.user)
+        # print(get_data)
+        # if get_data.result != "success":
         self.data = {
             "name": "",
             "hiragana": "",
@@ -28,6 +29,40 @@ class SetForm:
             "phone": "",
             "gmail": ""
         }
+        # else:
+        #     self.data={
+        #         "name": get_data.name,
+        #         "hiragana": get_data.hiragana,
+        #         "nickname": get_data.nickname,
+        #         "admission_year": get_data.admission_year,
+        #         "student_id": get_data.student_id,
+        #         "rainbow_id": get_data.rainbow_id,
+        #         "faculty": get_data.faculty,
+        #         "department": get_data.department,
+        #         "phone": get_data.phone,
+        #         "gmail": get_data.gmail
+        #     }
+
+    #getリクエスト送ったらデータ挿入する
+    def setdata(self,response):
+
+        # 新しい辞書にユーザーデータを格納する
+        user_data = response.get('userData', {})  # userDataキーがなければ空の辞書を返す
+
+        # 各フィールドを新しい辞書に格納する
+        
+        self.data["name"] = user_data.get('name')#self付け忘れてインスタンス変数に入れるの忘れないように
+        self.data["hiragana"] = user_data.get('hiragana')
+        self.data["nickname"] = user_data.get('nickname')
+        self.data["admission_year"] = user_data.get('admission_year')
+        self.data["student_id"] = user_data.get('student_id')
+        self.data["rainbow_id"] = user_data.get('rainbow_id')
+        self.data["faculty"] = user_data.get('faculty')
+        self.data["department"] = user_data.get('department')
+        self.data["phone"] = user_data.get('phone')
+        self.data["gmail"] = user_data.get('gmail')
+        
+        print("dataをセットしました")
 
     #モーダルのテンプレート１
     class SetModal1(Modal):
@@ -37,18 +72,19 @@ class SetForm:
 
             self.user = form.user
             
-            self.title = form.title
+            self.title = form.title.replace("(1/1)","")
             self.data = form.data
+            print(form)
             self.nextmodal = form.SetModal2(form)
 
             # 名前入力
-            self.name = InputText(label="氏名", style=InputTextStyle.short)
+            self.name = InputText(label="氏名", style=InputTextStyle.short,value = self.data.get("name"))
             self.add_item(self.name)
             
             # ふりがな入力
-            self.hiragana = InputText(label="氏名（ふりがな）", style=InputTextStyle.short)
+            self.hiragana = InputText(label="氏名（ふりがな）", style=InputTextStyle.short,value = self.data.get("name"))
             self.add_item(self.hiragana)
-            
+            print(self.data.get("name"))
             # ニックネーム入力
             self.nickname = InputText(label="ニックネーム", style=InputTextStyle.short)
             self.add_item(self.nickname)
@@ -75,7 +111,7 @@ class SetForm:
             from .viewHandle import SetModalView
 
             # 追加入力をさせるためのボタン表示の準備
-            view = SetModalView(self.user,self.title,self.nextmodal,discord.ButtonStyle.primary)
+            view = SetModalView(self.user,self.title+"(2/2)",self.nextmodal,discord.ButtonStyle.primary)
             
             # last_message = config.last_messageID
             # last_message.delete()
@@ -135,10 +171,12 @@ class SetForm:
             #完了ボタンを表示するためViewを作成
             view = SetFinishView(user=self.user,form = self.form,label=self.title,style=discord.ButtonStyle.primary)
             
-            last_message = config.last_messageID
+            # last_message = config.last_messageID
             # await last_message.delete_original_response()
 
+            #動的に中身とボタンを変更
             await interaction.response.edit_message(content=self.user+"ボタンを押して完了してください！",view = view)
+
             # message = await interaction.response.send_message(self.user+"ボタンを押して完了してください！",view=view,ephemeral=True)
             # config.last_messageID = message
                 # GasHandle.gas_post(interaction, name, hiragana, nickname, admission_year,student_id)
