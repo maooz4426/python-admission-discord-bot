@@ -13,7 +13,7 @@ def SetButtonStyle(form):
         return config.admission_button_style
     elif form.title == "情報変更届":
         return config.change_button_style
-    elif form.title == "OBOG届け":
+    elif form.title == "OBOG届":
         return config.obog_button_style
 
 
@@ -122,7 +122,7 @@ class SetFinishButton(Button):
         self.user = user
 
     async def callback(self, interaction: discord.Interaction):
-        GasHandle.gas_post(interaction=interaction,data=self.form.data)
+        GasHandle.gas_post(interaction=interaction,data=self.form.data,title=self.form.title)
 
         last_message = config.last_messageID
         # await last_message.delete_original_response()

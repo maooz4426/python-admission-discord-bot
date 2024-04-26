@@ -14,8 +14,9 @@ class GasHandle():
      
     # def gas_post(self,interaction, name, hiragana, nickname, admission_year, student_id, rainbow_id, faculty, department, phone, gmail):
     #postリクエストを送るためのメソッド
-    def gas_post(interaction,data):
+    def gas_post(interaction,data,title):
             print("post")
+            print(title)
             #提出時間取得
             now = datetime.datetime.now()
             format_now = now.isoformat()
@@ -24,6 +25,7 @@ class GasHandle():
         
             # データ辞書の作成
             payload = {
+                 "form":title,
                  "uid":str(interaction.user.id),
                  "currentTime":format_now,
                  **data
