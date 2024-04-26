@@ -6,7 +6,7 @@ import config
 import asyncio
 import re
 import os
-from .roleHandle import giveRole
+from .roleHandle import RoleHandle
 # from .modalHandle import SetForm
 
 
@@ -129,7 +129,7 @@ class SetFinishButton(Button):
         print(self.user)
 
         #ロール付与
-        await giveRole(interaction,title = self.form.title)
+        await RoleHandle(interaction).giveRole(title = self.form.title)
         # role = discord.utils.get(interaction.guild.roles, name="サークル会員")
         # print(role)
         # member = interaction.user

@@ -2,6 +2,7 @@ import json
 import requests
 import datetime
 import os
+from .roleHandle import RoleHandle
 
 url = os.getenv("URL")
 
@@ -22,12 +23,23 @@ class GasHandle():
             format_now = now.isoformat()
 
             headers = {"Content-Type": "application/json", }
+
+            if title == "入会届":
+                sheet = "admissionSheet"
+            elif title == "OBOG届":
+                sheet = "obogSheet"
+            else:
+                role = interaction.user.roles
+                print(role)
+                sheet = RoleHandle(interaction).setSheetNameByRole(role)
+
         
             # データ辞書の作成
             payload = {
-                 "form":title,
-                 "uid":str(interaction.user.id),
-                 "currentTime":format_now,
+                "sheet":sheet,
+                "form":title,
+                "uid":str(interaction.user.id),
+                "currentTime":format_now,
                  **data
             }
 
