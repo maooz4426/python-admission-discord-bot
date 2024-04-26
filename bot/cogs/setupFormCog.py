@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
-from modules.button import SetButtonToModal,SetButtonToView
-from modules.modal import SetForm
+from modules.buttonHandle import SetButtonToModal,SetButtonToView
+from modules.modalHandle import SetForm
 from discord.ui import View
-from modules.view import SetModalView,SetButtonView
+from modules.viewHandle import SetModalView,SetButtonView
 
 class SetupFormCog(commands.Cog):
     def __init__(self,bot):
@@ -12,7 +12,8 @@ class SetupFormCog(commands.Cog):
     #!setupでボタンを表示する
     @commands.command(name="setup")
     async def setup_form(self,ctx):
-        view = SetButtonView()
+        user = ctx.author.mention
+        view = SetButtonView(user)
         
         await ctx.send("下のボタンを選択してください", view = view)
 
