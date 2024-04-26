@@ -122,16 +122,16 @@ class SetFinishButton(Button):
         self.user = user
 
     async def callback(self, interaction: discord.Interaction):
+        await interaction.response.defer()
         GasHandle.gas_post(interaction=interaction,data=self.form.data,title=self.form.title)
 
         last_message = config.last_messageID
         # await last_message.delete_original_response()
 
         # message = await interaction.response.send_message(self.user+f"{self.label}の送信が完了しました",ephemeral=True)
-
         
-        
-        await interaction.response.edit_message(content=self.user+f"{self.label}の送信が完了しました", view = None)
+        #defer()してメッセージを送る時、interaction.edit_original_response または interaction.followup.sendしか使えない
+        await interaction.edit_original_response(content=self.user+f"{self.label}の送信が完了しました", view = None)
         await asyncio.sleep(20)
         await last_message.delete()
 
