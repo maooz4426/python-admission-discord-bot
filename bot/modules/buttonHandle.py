@@ -38,8 +38,14 @@ class SetButtonToView(Button):
         self._view = value  # セッターを通じて値を設定可能に
 
     async def callback(self,interaction:discord.Interaction):
+
+        # await interaction.response.send_message(content="ボタンを準備しています")
+        
+        # temp_message.delete()
         #15分作業可能にするため
         await interaction.response.defer(ephemeral=True)
+        #ボタン準備のための表示
+        temp = await interaction.followup.send(content="ボタンを準備しています…", ephemeral=True)
         from .modalHandle import SetForm
         from .viewHandle import SetModalView
 
@@ -65,7 +71,13 @@ class SetButtonToView(Button):
         # self.view = SetButtonToModal(user=self.user,label=self.title,modal=self.modal,style=self.style,form=self.form)
         
         # message = await interaction.response.send_message(self.comment, view=self.view,ephemeral=True)
-        message = await interaction.followup.send(self.comment, view=self.view, ephemeral=True)
+        # await temp_message.delete()
+        # await interaction.delete_original_response()
+
+        #遅らせた後にメッセージを送るのでfollowupを使う
+        message = await interaction.followup.send(content=self.comment, view=self.view,ephemeral=True)
+        #ボタン準備メッセージを削除
+        await temp.delete()
 
         #modalを作る前に使うために上に書くのでコメントアウト
         # if self.form.title == "情報変更届":
