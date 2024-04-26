@@ -5,6 +5,8 @@ from .gas import GasHandle
 import config
 import asyncio
 import re
+import os
+from .roleHandle import giveRole
 # from .modalHandle import SetForm
 
 
@@ -124,6 +126,19 @@ class SetFinishButton(Button):
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
         GasHandle.gas_post(interaction=interaction,data=self.form.data,title=self.form.title)
+        print(self.user)
+
+        #ロール付与
+        await giveRole(interaction,title = self.form.title)
+        # role = discord.utils.get(interaction.guild.roles, name="サークル会員")
+        # print(role)
+        # member = interaction.user
+        # await member.add_roles(role)
+        # uid = re.sub("[<@>]","",self.user)
+        # user_member = interaction.guild.get_member(user_id = uid)
+        # role = discord.utils.get(interaction.guild.roles, name=os.getenv("CIRCLE_MEMBER_ROLE_ID"))
+        # user_member.add_roles(role)
+
 
         # last_message = config.last_messageID
         # await last_message.delete_original_response()

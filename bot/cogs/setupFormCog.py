@@ -4,6 +4,7 @@ from modules.buttonHandle import SetButtonToModal,SetButtonToView
 from modules.modalHandle import SetForm
 from discord.ui import View
 from modules.viewHandle import SetModalView,SetButtonView
+from modules.roleHandle import giveRole
 
 class SetupFormCog(commands.Cog):
     def __init__(self,bot):
