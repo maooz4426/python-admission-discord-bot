@@ -3,7 +3,7 @@ from discord.ui import Modal,InputText,Select,View
 from discord import InputTextStyle,SelectOption
 import discord
 from .gas import GasHandle
-from .buttonHandle import SetButtonToModal
+from .buttonHandle import SetButtonToModal,SetButtonStyle
 # このインポートを関数内に移動
 # from .view import SetupModalView, SetupFinishView
 
@@ -112,7 +112,7 @@ class SetForm:
             from .viewHandle import SetModalView
 
             # 追加入力をさせるためのボタン表示の準備
-            view = SetModalView(self.user,self.title+"(2/2)",self.nextmodal,discord.ButtonStyle.primary,form=self.form)
+            view = SetModalView(self.user,self.title+"(2/2)",self.nextmodal,SetButtonStyle(self.form),form=self.form)
             
             # last_message = config.last_messageID
             # last_message.delete()

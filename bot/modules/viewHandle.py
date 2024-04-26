@@ -3,6 +3,7 @@ from discord.ui import View
 # 循環インポートを避けるためにこのインポートを遅延
 # from .modal_template import SetForm
 from .buttonHandle import SetButtonToView,SetFinishButton,SetButtonToModal
+import config
 
 
 # 最初のボタン表示をさせるためのView
@@ -27,9 +28,9 @@ class SetButtonView(View):
         # obog_view = SetModalView(user,"OBOG届(1/1)",obog_form.SetModal1(obog_form),style=discord.ButtonStyle.gray,form = obog_form)
 
         #個別のボタンを表示するボタン、modal表示しないように
-        admissionbutton = SetButtonToView(label="入会届",style=discord.ButtonStyle.primary,comment = "入会届を入力してください",user=user)
-        changebutton = SetButtonToView(label="情報変更届",style=discord.ButtonStyle.success,comment="登録情報を変更したい場合は下のボタンを押してください",user=user)
-        obogbutton = SetButtonToView(label="OBOG届",style=discord.ButtonStyle.gray,comment = "obog届を入力してください",user=user)
+        admissionbutton = SetButtonToView(label="入会届",style=config.admission_button_style,comment = "入会届を入力してください",user=user)
+        changebutton = SetButtonToView(label="情報変更届",style=config.change_button_style,comment="登録情報を変更したい場合は下のボタンを押してください",user=user)
+        obogbutton = SetButtonToView(label="OBOG届",style=config.obog_button_style,comment = "obog届を入力してください",user=user)
         self.add_item(admissionbutton)
         self.add_item(changebutton)
         self.add_item(obogbutton)

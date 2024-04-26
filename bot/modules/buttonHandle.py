@@ -8,6 +8,14 @@ import re
 # from .modalHandle import SetForm
 
 
+def SetButtonStyle(form):
+    if form.title == "入会届":
+        return config.admission_button_style
+    elif form.title == "情報変更届":
+        return config.change_button_style
+    elif form.title == "OBOG届け":
+        return config.obog_button_style
+
 
 #ボタンを押したらボタン(View）が表示される
 class SetButtonToView(Button):
@@ -52,7 +60,7 @@ class SetButtonToView(Button):
         #modal1をここで作成する
         self.modal = self.form.SetModal1(self.form)
         # Modal 用の View をここで作成する（モーダル遷移ボタンを表示）
-        self.view = SetModalView(user=self.user, label=self.title, modal=self.modal, style=self.style, form=self.form)
+        self.view = SetModalView(user=self.user, label=self.title + "(1/1)", modal=self.modal, style=self.style, form=self.form)
 
         # self.view = SetButtonToModal(user=self.user,label=self.title,modal=self.modal,style=self.style,form=self.form)
         
