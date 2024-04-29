@@ -31,9 +31,11 @@ class SetButtonView(View):
         admissionbutton = SetButtonToView(label="入会届",style=config.admission_button_style,comment = "入会届を入力してください",user=user)
         changebutton = SetButtonToView(label="情報変更届",style=config.change_button_style,comment="登録情報を変更したい場合は下のボタンを押してください",user=user)
         obogbutton = SetButtonToView(label="OBOG届",style=config.obog_button_style,comment = "obog届を入力してください",user=user)
+        deletebutton = SetButtonToView(label="退会届", style=config.delete_button_style,comment = "退会届を入力してください",user=user)
         self.add_item(admissionbutton)
         self.add_item(changebutton)
         self.add_item(obogbutton)
+        self.add_item(deletebutton)
     
         # 個別のボタンを表示、ただmodalを表示したくないのでコメントアウト
         # admissionbutton = SetButtonToView(label="入会届",style=discord.ButtonStyle.primary,view=admision_view,comment = "入会届を入力してください",user=user,form = admission_form)
