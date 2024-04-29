@@ -5,6 +5,8 @@ from .gas import GasHandle
 import config
 import asyncio
 import re
+import os
+from .roleHandle import RoleHandle
 # from .modalHandle import SetForm
 
 
@@ -13,7 +15,7 @@ def SetButtonStyle(form):
         return config.admission_button_style
     elif form.title == "情報変更届":
         return config.change_button_style
-    elif form.title == "OBOG届け":
+    elif form.title == "OBOG届":
         return config.obog_button_style
 
 
@@ -122,16 +124,29 @@ class SetFinishButton(Button):
         self.user = user
 
     async def callback(self, interaction: discord.Interaction):
-        GasHandle.gas_post(interaction=interaction,data=self.form.data)
+        await interaction.response.defer()
+        GasHandle.gas_post(interaction=interaction,data=self.form.data,title=self.form.title)
+        print(self.user)
 
-        last_message = config.last_messageID
+        #ロール付与
+        await RoleHandle(interaction).giveRole(title = self.form.title)
+        # role = discord.utils.get(interaction.guild.roles, name="サークル会員")
+        # print(role)
+        # member = interaction.user
+        # await member.add_roles(role)
+        # uid = re.sub("[<@>]","",self.user)
+        # user_member = interaction.guild.get_member(user_id = uid)
+        # role = discord.utils.get(interaction.guild.roles, name=os.getenv("CIRCLE_MEMBER_ROLE_ID"))
+        # user_member.add_roles(role)
+
+
+        # last_message = config.last_messageID
         # await last_message.delete_original_response()
 
         # message = await interaction.response.send_message(self.user+f"{self.label}の送信が完了しました",ephemeral=True)
-
         
-        
-        await interaction.response.edit_message(content=self.user+f"{self.label}の送信が完了しました", view = None)
+        #defer()してメッセージを送る時、interaction.edit_original_response または interaction.followup.sendしか使えない
+        last_message = await interaction.edit_original_response(content=self.user+f"{self.label}の送信が完了しました", view = None)
         await asyncio.sleep(20)
         await last_message.delete()
 

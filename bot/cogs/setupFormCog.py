@@ -5,6 +5,7 @@ from modules.modalHandle import SetForm
 from discord.ui import View
 from modules.viewHandle import SetModalView,SetButtonView
 
+
 class SetupFormCog(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
