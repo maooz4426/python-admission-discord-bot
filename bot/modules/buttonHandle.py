@@ -88,6 +88,7 @@ class SetButtonToView(Button):
 
             #遅らせた後にメッセージを送るのでfollowupを使う
             self.comment += userName + "さんの情報が削除されます"
+            print(self.comment)
             message = await interaction.followup.send(content=self.comment, view=view,ephemeral=True)
 
         

@@ -37,6 +37,7 @@ class GasHandle():
         
             # データ辞書の作成
             payload = {
+                "mode":"submit",
                 "sheet":sheet,
                 "form":title,
                 "uid":str(interaction.user.id),
@@ -61,10 +62,11 @@ class GasHandle():
 
             # データ辞書の作成
         payload = {
+            "mode":"delete",
             "sheet":sheet,
             "form":title,
             # "uid":str(interaction.user.id),
-            "uid":data.get("uid"),
+            "uid":str(interaction.user.id),
         }
 
         try:
