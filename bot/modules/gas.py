@@ -16,6 +16,7 @@ class GasHandle():
     # def gas_post(self,interaction, name, hiragana, nickname, admission_year, student_id, rainbow_id, faculty, department, phone, gmail):
     #postリクエストを送るためのメソッド
     def gas_post(interaction,data,title):
+            
             print("post")
             print(title)
             #提出時間取得
@@ -50,6 +51,29 @@ class GasHandle():
                 
             except requests.RequestException as e:
                 print(f"Request failed: {e}")
+
+    def gas_post_delete(interaction,data,title):
+        headers = {"Content-Type": "application/json", }
+
+        role = interaction.user.roles
+        print(role)
+        sheet = RoleHandle(interaction).setSheetNameByRole(role)
+
+            # データ辞書の作成
+        payload = {
+            "sheet":sheet,
+            "form":title,
+            # "uid":str(interaction.user.id),
+            "uid":data.get("uid"),
+        }
+
+        try:
+            response = requests.post(url, data=json.dumps(payload), headers=headers)
+            response.raise_for_status()  # HTTPエラーをチェック
+            print(json.dumps(payload)) #jsonの中身チェック
+                
+        except requests.RequestException as e:
+            print(f"Request failed: {e}")
 
     def gas_get(user):
         print("get")

@@ -17,6 +17,11 @@ def SetButtonStyle(form):
         return config.change_button_style
     elif form.title == "OBOG届":
         return config.obog_button_style
+    
+def formalizeUid(user):
+    uid = re.sub("[<@>]","",user)
+
+    return uid
 
 
 #ボタンを押したらボタン(View）が表示される
@@ -55,8 +60,8 @@ class SetButtonToView(Button):
         self.form = SetForm(self.user,self.title)
 
         #情報変更届の場合はdataの中身をセット
-        if self.form.title == "情報変更届":
-            uid = re.sub("[<@>]","",self.user)
+        if self.form.title == "情報変更届" or self.form.title=="退会届":
+            uid = formalizeUid(self.user)
 
             get_data = GasHandle.gas_get(uid)
 
@@ -65,34 +70,57 @@ class SetButtonToView(Button):
             from .modalHandle import SetForm
             self.form.setdata(get_data)
 
-        #modal1をここで作成する
-        self.modal = self.form.SetModal1(self.form)
-        # Modal 用の View をここで作成する（モーダル遷移ボタンを表示）
-        self.view = SetModalView(user=self.user, label=self.title + "(1/1)", modal=self.modal, style=self.style, form=self.form)
+        # elif self.form.title == "退会届":
+        #     uid = formalizeUid(self.user)
 
-        # self.view = SetButtonToModal(user=self.user,label=self.title,modal=self.modal,style=self.style,form=self.form)
+        #     get_data = GasHandle.gas_get(uid)
+        #     print("getdata")
+
+        #退会届は別ボタンを実装する
+        if self.form.title == "退会届":
+
+            #ユーザーネームを取得して表示
+            userName = self.form.data.get("name")
+
+            from .viewHandle import SetDeleteView
+            #viewを表示
+            view = SetDeleteView(user = self.user,form = self.form,label = self.title,style=self.style)
+
+            #遅らせた後にメッセージを送るのでfollowupを使う
+            self.comment += userName + "さんの情報が削除されます"
+            message = await interaction.followup.send(content=self.comment, view=view,ephemeral=True)
+
         
-        # message = await interaction.response.send_message(self.comment, view=self.view,ephemeral=True)
-        # await temp_message.delete()
-        # await interaction.delete_original_response()
+        else:
+            #modal1をここで作成する
+            self.modal = self.form.SetModal1(self.form)
+            # Modal 用の View をここで作成する（モーダル遷移ボタンを表示）
+            self.view = SetModalView(user=self.user, label=self.title + "(1/1)", modal=self.modal, style=self.style, form=self.form)
 
-        #遅らせた後にメッセージを送るのでfollowupを使う
-        message = await interaction.followup.send(content=self.comment, view=self.view,ephemeral=True)
+            # self.view = SetButtonToModal(user=self.user,label=self.title,modal=self.modal,style=self.style,form=self.form)
+            
+            # message = await interaction.response.send_message(self.comment, view=self.view,ephemeral=True)
+            # await temp_message.delete()
+            # await interaction.delete_original_response()
+
+            #遅らせた後にメッセージを送るのでfollowupを使う
+            message = await interaction.followup.send(content=self.comment, view=self.view,ephemeral=True)
+
         #ボタン準備メッセージを削除
         await temp.delete()
 
-        #modalを作る前に使うために上に書くのでコメントアウト
-        # if self.form.title == "情報変更届":
-        #     uid = re.sub("[<@>]","",self.user)
+            #modalを作る前に使うために上に書くのでコメントアウト
+            # if self.form.title == "情報変更届":
+            #     uid = re.sub("[<@>]","",self.user)
 
-        #     get_data = GasHandle.gas_get(uid)
+            #     get_data = GasHandle.gas_get(uid)
 
-        #     print("getdata")
-        #     # print(get_data)
-        #     from .modalHandle import SetForm
-        #     self.form.setdata(get_data)
-            # print(self.form.data.get("name"))
-            
+            #     print("getdata")
+            #     # print(get_data)
+            #     from .modalHandle import SetForm
+            #     self.form.setdata(get_data)
+                # print(self.form.data.get("name"))
+                
 
         config.last_messageID = message
 
@@ -151,3 +179,20 @@ class SetFinishButton(Button):
         await last_message.delete()
 
         # await last_message.delete_original_response()
+
+#退会用ボタン
+class SetDeleteButton(Button):
+    def __init__(self,user,form,label,style):
+        super().__init__(label = label + "送信",style=style)
+        self.form = form
+        self.user = user
+
+
+    async def callback(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+        GasHandle.gas_post_delete(interaction,data = self.form.data,title = self.form.title)
+
+        last_message=await interaction.edit_original_response(content=self.user+f"{self.label}の送信が完了しました", view = None)
+        await asyncio.sleep(20)
+        await last_message.delete()
+
