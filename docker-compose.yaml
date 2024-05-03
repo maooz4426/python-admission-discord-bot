@@ -1,0 +1,10 @@
+services:
+  bot:
+    build: .
+    environment:
+      # ${}で囲んだものは.envファイルから環境変数を取得する
+      - TOKEN=${TOKEN}
+      - URL=${URL}
+      - CIRCLE_MEMBER_ROLE_ID=${CIRCLE_MEMBER_ROLE_ID}
+      - OBOG_ROLE_ID = ${OBOG_ROLE_ID}
+    command: ["python", "bot/bot.py"]
