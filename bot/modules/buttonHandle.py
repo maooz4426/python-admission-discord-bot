@@ -154,6 +154,8 @@ class SetFinishButton(Button):
 
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
+        
+        await interaction.edit_original_response(content = "送信中です",view = None)
         GasHandle.gas_post(interaction=interaction,data=self.form.data,title=self.form.title)
         print(self.user)
 
