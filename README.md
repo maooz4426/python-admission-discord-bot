@@ -3,9 +3,11 @@ discord　botでサークルの入会管理を出来るようにしたbotです�
 GASをAPIとして、discordもモーダルで入力した情報をスプレッドシートに書き込めるようにしています。
 
 # 開発環境
-python 3.12.2
-pycord 2.5.0
-docker
+- python 3.12.2 
+
+- pycord 2.5.0
+
+- docker
 
 # envファイルの中身
 ```
