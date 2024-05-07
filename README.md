@@ -20,7 +20,7 @@ CIRCLE_MEMBER_ROLE_ID = "circle_member_role_id"
 OBOG_ROLE_ID= "obog_role_id"
 ```
 
-#　起動方法
+# 起動方法
 ターミナルで以下のコマンドを打ち込む
 
 イメージを作成
