@@ -10,7 +10,7 @@ GASをAPIとして、discordもモーダルで入力した情報をスプレッ�
 - docker
 
 # GASのコード
-以下のコードをデプロイして、それをenvファイルに設定してください
+以下のコードをデプロイして、URLを発行してください
 ```
 const admissionSheetID = PropertiesService.getScriptProperties().getProperty('admissionSheet');
 const admissionSheetName = 'シート1';
