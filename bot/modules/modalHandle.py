@@ -1,9 +1,9 @@
 
-from discord.ui import Modal,InputText,Select,View
-from discord import InputTextStyle,SelectOption
+from discord.ui import Modal,InputText
+from discord import InputTextStyle
 import discord
-from .gas import GasHandle
-from .buttonHandle import SetButtonToModal,SetButtonStyle
+
+from .buttonHandle import SetButtonStyle
 # このインポートを関数内に移動
 # from .view import SetupModalView, SetupFinishView
 

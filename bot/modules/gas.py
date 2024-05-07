@@ -49,6 +49,7 @@ class GasHandle():
                 response = requests.post(url, data=json.dumps(payload), headers=headers)
                 response.raise_for_status()  # HTTPエラーをチェック
                 print(json.dumps(payload)) #jsonの中身チェック
+                # interaction.edit_original_response(content = "送信中です",view = None)
                 
             except requests.RequestException as e:
                 print(f"Request failed: {e}")
