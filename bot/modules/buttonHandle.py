@@ -1,11 +1,11 @@
 from typing import Any
 import discord
-from discord.ui import Button,View
+from discord.ui import Button
 from .gas import GasHandle
 import config
 import asyncio
 import re
-import os
+# import os
 from .roleHandle import RoleHandle
 # from .modalHandle import SetForm
 
@@ -154,6 +154,8 @@ class SetFinishButton(Button):
 
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
+        
+        await interaction.edit_original_response(content = "送信中です",view = None)
         GasHandle.gas_post(interaction=interaction,data=self.form.data,title=self.form.title)
         print(self.user)
 
@@ -190,7 +192,9 @@ class SetDeleteButton(Button):
 
 
     async def callback(self, interaction: discord.Interaction):
+        # await interaction.edit_original_response(content = "送信中です",view = None)
         await interaction.response.defer()
+        await interaction.edit_original_response(content = "送信中です",view = None)
         GasHandle.gas_post_delete(interaction,data = self.form.data,title = self.form.title)
 
         last_message=await interaction.edit_original_response(content=self.user+f"{self.label}の送信が完了しました", view = None)
