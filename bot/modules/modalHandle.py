@@ -12,11 +12,7 @@ class SetForm:
     def __init__(self,user,title):
         self.user = user
         self.title = title
-        # self.uid = str(interaction.user.id)
 
-        # get_data = GasHandle.gas_get(self.user)
-        # print(get_data)
-        # if get_data.result != "success":
         self.data = {
             "name": "",
             "hiragana": "",
@@ -29,19 +25,7 @@ class SetForm:
             "phone": "",
             "gmail": ""
         }
-        # else:
-        #     self.data={
-        #         "name": get_data.name,
-        #         "hiragana": get_data.hiragana,
-        #         "nickname": get_data.nickname,
-        #         "admission_year": get_data.admission_year,
-        #         "student_id": get_data.student_id,
-        #         "rainbow_id": get_data.rainbow_id,
-        #         "faculty": get_data.faculty,
-        #         "department": get_data.department,
-        #         "phone": get_data.phone,
-        #         "gmail": get_data.gmail
-        #     }
+
 
     #getリクエスト送ったらデータ挿入する
     def setdata(self,response):
@@ -113,15 +97,7 @@ class SetForm:
 
             # 追加入力をさせるためのボタン表示の準備
             view = SetModalView(self.user,self.title+"(2/2)",self.nextmodal,SetButtonStyle(self.form),form=self.form)
-            
-            # last_message = config.last_messageID
-            # last_message.delete()
-            #前のメッセージを消去
-            # await last_message.delete_original_response()
-
-            # 説明とボタンを表示
-            # message = await interaction.response.send_message(self.user+f"{self.title}の続きを入力してください",view = view,ephemeral=True)
-            # await interaction.response.edit_message(message_id=last_message,content=self.user+f"{self.title}の続きを入力してください",view=view)
+        
 
             #メッセージの中身とボタンを入れ替え
             await interaction.response.edit_message(content=self.user+f"{self.title}の続きを入力してください",view = view)
@@ -172,57 +148,7 @@ class SetForm:
             #完了ボタンを表示するためViewを作成
             view = SetFinishView(user=self.user,form = self.form,label=self.title,style=discord.ButtonStyle.primary)
             
-            # last_message = config.last_messageID
-            # await last_message.delete_original_response()
 
             #動的に中身とボタンを変更
             await interaction.response.edit_message(content=self.user+"ボタンを押して完了してください！",view = view)
 
-            # message = await interaction.response.send_message(self.user+"ボタンを押して完了してください！",view=view,ephemeral=True)
-            # config.last_messageID = message
-                # GasHandle.gas_post(interaction, name, hiragana, nickname, admission_year,student_id)
-                # await interaction.response.send_message(f"{self.title}を送信しました")
-                # rainbow_id = self.rainbow_id.value
-                # faculty = self.faculty.value
-                # department = self.department.value
-                # phone = self.phone.value
-                # gmail = self.gmail.value
-
-            #gasにpostリクエスト送信
-            # gas_post(interaction, name, hiragana, nickname, admission_year, student_id, rainbow_id, faculty, department, phone, gmail)
-            # GasHandle.gas_post(interaction, name, hiragana, nickname, admission_year,student_id)
-            # await interaction.response.send_message(f"{self.title}を送信しました")
-
-    # class SetModal2(Modal):
-    #         def __init__(self,title):
-    #             super().__init__(title=title)
-
-    #             self.title = title
-    #             # RAINBOW ID
-    #             self.rainbow_id = InputText(label="RAINBOW ID", style=InputTextStyle.short)
-    #             self.add_item(self.rainbow_id)
-                
-    #             # 学部
-    #             self.faculty = InputText(label="学部", style=InputTextStyle.short)
-    #             self.add_item(self.faculty)
-                
-    #             # 学科（コース）
-    #             self.department = InputText(label="学科（コース）", style=InputTextStyle.short)
-    #             self.add_item(self.department)
-                
-    #             # 携帯電話番号
-    #             self.phone = InputText(label="携帯電話番号", style=InputTextStyle.short)
-    #             self.add_item(self.phone)
-                
-    #             # Gmailアドレス
-    #             self.gmail = InputText(label="Gmailアドレス", style=InputTextStyle.short)
-    #             self.add_item(self.gmail)
-
-    #         async def callback(self,interaction):
-    #             rainbow_id = self.rainbow_id.value
-    #             aculty = self.faculty.value
-    #             department = self.department.value
-    #             phone = self.phone.value
-    #             gmail = self.gmail.value
-
-    #             await interaction.response.send_message(f"{self.title}を送信")
