@@ -5,7 +5,7 @@ import discord
 
 from .buttonHandle import SetButtonStyle
 # このインポートを関数内に移動
-# from .view import SetupModalView, SetupFinishView
+
 
 class SetForm:
     #送るデータを辞書型配列として初期化
